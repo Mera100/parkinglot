@@ -32,6 +32,8 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	// https://mvnrepository.com/artifact/com.h2database/h2
+	implementation("com.h2database:h2:1.3.148")
 }
 
 tasks.withType<KotlinCompile> {
