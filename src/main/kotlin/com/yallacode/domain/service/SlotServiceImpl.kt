@@ -4,9 +4,9 @@ import com.yallacode.domain.model.SlotType
 import com.yallacode.repository.SlotRepository
 import com.yallacode.repository.entity.ParkingLot
 import com.yallacode.repository.entity.Slot
+import java.util.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.util.Optional
 
 @Service
 class SlotServiceImpl : SlotService {
@@ -31,6 +31,4 @@ class SlotServiceImpl : SlotService {
     override fun freeSlot(slotId: Long) {
         TODO("Not yet implemented")
     }
-    fun getAllEmployees(): List<Slot> =
-        slotRepository.findAllByParkingLotAndType()
 }

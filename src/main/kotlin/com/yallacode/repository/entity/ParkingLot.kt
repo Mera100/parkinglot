@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
-@Table(name="parkinglot")
+@Table(name="parking_lot")
 class ParkingLot (
     @Id
     @GeneratedValue
