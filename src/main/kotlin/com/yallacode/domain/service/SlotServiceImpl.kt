@@ -1,10 +1,12 @@
 package com.yallacode.domain.service
 
 import com.yallacode.domain.model.SlotType
+import com.yallacode.domain.service.exceptions.NoFreeSlotFoundException
+import com.yallacode.domain.service.exceptions.SlotAlreadyFreeException
+import com.yallacode.domain.service.exceptions.SlotNotFoundException
+import com.yallacode.repository.ParkingLotRepository
 import com.yallacode.repository.SlotRepository
-import com.yallacode.repository.entity.ParkingLot
 import com.yallacode.repository.entity.Slot
-import java.util.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -12,23 +14,31 @@ import org.springframework.stereotype.Service
 class SlotServiceImpl : SlotService {
     @Autowired
     private lateinit var slotRepository: SlotRepository
+    @Autowired
+    private lateinit var parkingLotRepository : ParkingLotRepository
 
-    override fun bookFreeSlot(parkingLot: ParkingLot, slotType: SlotType): Optional<Slot> {
-        var foundSlots = slotRepository.findAllByParkingLotAndType(parkingLot, slotType)
+    override fun bookFreeSlot(parkingLotId: Long, slotType: SlotType): Slot {
+        var foundSlots = slotRepository.findAllByParkingLotIdAndType(parkingLotId, slotType)
         if (foundSlots.isEmpty() && slotType != SlotType.NORMAL) {
-            foundSlots = slotRepository.findAllByParkingLotAndType(parkingLot, SlotType.NORMAL)
+            foundSlots = slotRepository.findAllByParkingLotIdAndType(parkingLotId, SlotType.NORMAL)
         }
         if (foundSlots.isNotEmpty()) {
             val random = (foundSlots.indices).random()
             val slot = foundSlots[random]
             slot.booked = true
-            val savedSlot = slotRepository.save(slot)
-            return Optional.of(savedSlot)
+            return slotRepository.save(slot)
+        } else {
+            throw NoFreeSlotFoundException()
         }
-        return Optional.empty()
+
     }
 
-    override fun freeSlot(slotId: Long) {
-        TODO("Not yet implemented")
+    override fun freeSlot(slotId: Long, parkingLotId: Long) {
+        val slot = slotRepository.findByParkingLotIdAndId(parkingLotId, slotId).orElseThrow{ SlotNotFoundException() }
+        if (slot.booked){
+            slot.booked = false
+        } else {
+            throw SlotAlreadyFreeException()
+        }
     }
 }
