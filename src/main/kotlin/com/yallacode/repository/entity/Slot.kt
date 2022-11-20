@@ -21,8 +21,4 @@ class Slot(
     @Enumerated(EnumType.STRING)
     var type: SlotType,
     var booked: Boolean
-    ){
-    override fun toString(): String {
-        return "Slot(id=$id, slotNumber=$slotNumber, parkingLot=$parkingLot, type=$type, booked=$booked)"
-    }
-}
+    )

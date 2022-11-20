@@ -1,6 +1,6 @@
 package com.yallacode.application
 
-import com.yallacode.domain.model.SlotType
+import com.google.gson.Gson
 import com.yallacode.domain.service.SlotService
 import javax.validation.Valid
 import lombok.extern.slf4j.Slf4j
@@ -19,12 +19,13 @@ class SlotController {
 
     @Autowired
     private lateinit var slotService: SlotService
+    private val parser = Gson()
 
     @PostMapping
     fun bookSlot(@RequestBody request: BookSlotDto): ResponseEntity<String> {
 
-        val slot = slotService.bookFreeSlot(request.parkingLotId.toLong(), SlotType.valueOf(request.slotType))
-        return ResponseEntity.ok(slot.toString())
+        val slot = slotService.bookFreeSlot(request.parkingLotId, request.slotType)
+        return ResponseEntity.ok(parser.toJson(slot))
     }
 
     @PutMapping
