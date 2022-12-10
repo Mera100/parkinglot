@@ -18,9 +18,9 @@ class SlotServiceImpl : SlotService {
     private lateinit var parkingLotRepository : ParkingLotRepository
 
     override fun bookFreeSlot(parkingLotId: Long, slotType: SlotType): Slot {
-        var foundSlots = slotRepository.findAllByParkingLotIdAndType(parkingLotId, slotType)
+        var foundSlots = slotRepository.findAllByParkingLotIdAndTypeAndBooked(parkingLotId, slotType, false)
         if (foundSlots.isEmpty() && slotType != SlotType.NORMAL) {
-            foundSlots = slotRepository.findAllByParkingLotIdAndType(parkingLotId, SlotType.NORMAL)
+            foundSlots = slotRepository.findAllByParkingLotIdAndTypeAndBooked(parkingLotId, SlotType.NORMAL, false)
         }
         if (foundSlots.isNotEmpty()) {
             val random = (foundSlots.indices).random()
@@ -30,7 +30,6 @@ class SlotServiceImpl : SlotService {
         } else {
             throw NoFreeSlotFoundException()
         }
-
     }
 
     override fun freeSlot(slotId: Long, parkingLotId: Long) {

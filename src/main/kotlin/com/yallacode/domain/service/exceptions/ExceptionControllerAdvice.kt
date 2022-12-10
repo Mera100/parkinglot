@@ -11,6 +11,6 @@ class ExceptionControllerAdvice {
     @ExceptionHandler
     fun handleIllegalStateException(ex: RuntimeException): ResponseEntity<String> {
 
-        return ResponseEntity("Problem occurred while processing request", HttpStatus.BAD_REQUEST)
+        return ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)
     }
 }
