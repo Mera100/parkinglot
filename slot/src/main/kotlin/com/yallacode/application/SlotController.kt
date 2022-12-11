@@ -3,17 +3,17 @@ package com.yallacode.application
 import com.google.gson.Gson
 import com.yallacode.domain.service.SlotService
 import lombok.extern.slf4j.Slf4j
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("api/v1/slot")
 @Slf4j
-class SlotController {
+class SlotController(
 
-    @Autowired
-    private lateinit var slotService: SlotService
+    val slotService: SlotService
+) {
+
     private val parser = Gson()
 
     @PostMapping(produces = ["application/json"])
